@@ -67,7 +67,7 @@ def export_pptx(project_id):
 
         # Build download URLs
         download_path = f"/files/{project_id}/exports/{filename}"
-        base_url = request.host_url.rstrip("/")
+        base_url = request.url_root.rstrip("/")
         download_url_absolute = f"{base_url}{download_path}"
 
         return success_response(
@@ -138,7 +138,7 @@ def export_pdf(project_id):
 
         # Build download URLs
         download_path = f"/files/{project_id}/exports/{filename}"
-        base_url = request.host_url.rstrip("/")
+        base_url = request.url_root.rstrip("/")
         download_url_absolute = f"{base_url}{download_path}"
 
         return success_response(
