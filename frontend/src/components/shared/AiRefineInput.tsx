@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { Sparkles, History, ChevronDown, ChevronUp } from 'lucide-react';
+import { Sparkles, History, ChevronDown, ChevronUp, Send } from 'lucide-react';
 
 export interface AiRefineInputProps {
   /** 标题文字 */
@@ -63,7 +63,7 @@ export const AiRefineInput: React.FC<AiRefineInputProps> = ({
   const isCompactMode = !title;
 
   return (
-    <div className={isCompactMode ? className : `bg-gradient-to-r from-purple-50 to-blue-50 rounded-lg p-3 md:p-4 border border-purple-200 ${className}`}>
+    <div className={isCompactMode ? `group ${className}` : `group bg-gradient-to-r from-purple-50 to-blue-50 rounded-lg p-3 md:p-4 border border-purple-200 ${className}`}>
       {/* 标题和历史按钮 - 仅非紧凑模式显示 */}
       {!isCompactMode && (
         <div className="flex items-center justify-between mb-2 md:mb-3">
@@ -138,6 +138,20 @@ export const AiRefineInput: React.FC<AiRefineInputProps> = ({
             </div>
           )}
         </div>
+        
+        {/* 提交按钮 - 移动端始终显示，桌面端鼠标悬停时显示 */}
+        <button
+          onClick={handleSubmit}
+          disabled={!requirement.trim() || isSubmitting}
+          className={`flex-shrink-0 w-9 h-9 flex items-center justify-center rounded-lg transition-all ${
+            !requirement.trim() || isSubmitting
+              ? 'bg-gray-200 text-gray-400 cursor-not-allowed'
+              : 'bg-purple-500 text-white hover:bg-purple-600 active:scale-95'
+          } md:opacity-0 md:group-hover:opacity-100 md:focus:opacity-100`}
+          title="提交 (Ctrl+Enter)"
+        >
+          <Send size={16} className={isSubmitting ? 'animate-pulse' : ''} />
+        </button>
       </div>
     </div>
   );

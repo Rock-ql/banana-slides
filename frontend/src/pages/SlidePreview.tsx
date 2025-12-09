@@ -924,6 +924,34 @@ export const SlidePreview: React.FC = () => {
 
                   {/* 操作 */}
                   <div className="flex items-center gap-1.5 md:gap-2 w-full sm:w-auto justify-center">
+                    {/* 手机端：模板更换按钮 */}
+                    <Button
+                      variant="ghost"
+                      size="sm"
+                      icon={<Upload size={16} />}
+                      onClick={() => setIsTemplateModalOpen(true)}
+                      className="lg:hidden text-xs"
+                      title="更换模板"
+                    />
+                    {/* 手机端：素材生成按钮 */}
+                    <Button
+                      variant="ghost"
+                      size="sm"
+                      icon={<ImagePlus size={16} />}
+                      onClick={() => setIsMaterialModalOpen(true)}
+                      className="lg:hidden text-xs"
+                      title="素材生成"
+                    />
+                    {/* 手机端：刷新按钮 */}
+                    <Button
+                      variant="ghost"
+                      size="sm"
+                      icon={<RefreshCw size={16} className={isRefreshing ? 'animate-spin' : ''} />}
+                      onClick={handleRefresh}
+                      disabled={isRefreshing}
+                      className="md:hidden text-xs"
+                      title="刷新"
+                    />
                     {imageVersions.length > 1 && (
                       <div className="relative">
                         <Button

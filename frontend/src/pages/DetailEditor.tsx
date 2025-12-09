@@ -186,7 +186,6 @@ export const DetailEditor: React.FC = () => {
               className="text-xs md:text-sm"
             >
               <span className="hidden sm:inline">生成图片</span>
-              <span className="sm:hidden">→</span>
             </Button>
           </div>
         </div>

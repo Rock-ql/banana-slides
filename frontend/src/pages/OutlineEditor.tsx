@@ -220,7 +220,6 @@ export const OutlineEditor: React.FC = () => {
               className="text-xs md:text-sm"
             >
               <span className="hidden sm:inline">下一步</span>
-              <span className="sm:hidden">→</span>
             </Button>
           </div>
         </div>
@@ -294,6 +293,16 @@ export const OutlineEditor: React.FC = () => {
                   {currentProject.creation_type === 'outline' ? '重新解析大纲' : '重新生成大纲'}
                 </Button>
               )}
+              {/* 手机端：保存按钮 */}
+              <Button 
+                variant="secondary" 
+                size="sm" 
+                icon={<Save size={16} className="md:w-[18px] md:h-[18px]" />}
+                onClick={async () => await saveAllPages()}
+                className="md:hidden w-full sm:w-auto text-sm md:text-base"
+              >
+                保存
+              </Button>
             </div>
 
             {/* 已上传的文件列表 */}

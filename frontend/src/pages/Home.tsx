@@ -446,6 +446,7 @@ export const Home: React.FC = () => {
             </span>
           </div>
           <div className="flex items-center gap-2 md:gap-3">
+            {/* 桌面端：带文字的素材生成按钮 */}
             <Button
               variant="ghost"
               size="sm"
@@ -455,6 +456,15 @@ export const Home: React.FC = () => {
             >
               <span className="hidden md:inline">素材生成</span>
             </Button>
+            {/* 手机端：仅图标的素材生成按钮 */}
+            <Button
+              variant="ghost"
+              size="sm"
+              icon={<ImagePlus size={16} />}
+              onClick={handleOpenMaterialModal}
+              className="sm:hidden hover:bg-banana-100/60 hover:shadow-sm hover:scale-105 transition-all duration-200"
+              title="素材生成"
+            />
             <Button 
               variant="ghost" 
               size="sm" 
