@@ -1,5 +1,5 @@
-# 使用 Python 3.10 作为基础镜像
-FROM python:3.10-slim
+# 使用 Python 3.12 作为基础镜像（onnxruntime支持3.10-3.13）
+FROM python:3.12-slim
 
 # 设置工作目录
 WORKDIR /app
@@ -17,13 +17,8 @@ RUN chmod +x /usr/local/bin/uv
 COPY pyproject.toml ./
 COPY uv.lock* ./
 
-# 安装 Python 依赖
-# 如果有 uv.lock 文件则使用 --frozen，否则生成新的锁定文件
-RUN if [ -f uv.lock ]; then \
-        uv sync --frozen; \
-    else \
-        uv sync; \
-    fi
+# 安装 Python 依赖，指定使用当前Python版本
+RUN uv sync --python $(which python3)
 
 # 复制后端代码
 COPY backend/ ./backend/
