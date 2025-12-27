@@ -43,6 +43,7 @@ export const SlidePreview: React.FC = () => {
     deletePageById,
     exportPPTX,
     exportPDF,
+    exportEditablePPTX,
     isGlobalLoading,
     taskProgress,
     pageGeneratingTasks,
@@ -181,7 +182,7 @@ export const SlidePreview: React.FC = () => {
     
     if (hasImages) {
       confirm(
-        '部分页面已有图片，重新生成将覆盖，确定继续吗？',
+        '将重新生成所有页面（历史记录将会保存），确定继续吗？',
         executeGenerate,
         { title: '确认重新生成', variant: 'warning' }
       );
@@ -518,12 +519,14 @@ export const SlidePreview: React.FC = () => {
     }
   };
 
-  const handleExport = async (type: 'pptx' | 'pdf') => {
+  const handleExport = async (type: 'pptx' | 'pdf' | 'editable-pptx') => {
     setShowExportMenu(false);
     if (type === 'pptx') {
       await exportPPTX();
-    } else {
+    } else if (type === 'pdf') {
       await exportPDF();
+    } else if (type === 'editable-pptx') {
+      await exportEditablePPTX();
     }
   };
 
@@ -725,12 +728,18 @@ export const SlidePreview: React.FC = () => {
               <span className="sm:hidden">导出</span>
             </Button>
             {showExportMenu && (
-              <div className="absolute right-0 mt-2 w-40 bg-white rounded-lg shadow-lg border border-gray-200 py-2 z-10">
+              <div className="absolute right-0 mt-2 w-48 bg-white rounded-lg shadow-lg border border-gray-200 py-2 z-10">
                 <button
                   onClick={() => handleExport('pptx')}
                   className="w-full px-4 py-2 text-left hover:bg-gray-50 transition-colors text-sm"
                 >
                   导出为 PPTX
+                </button>
+                <button
+                  onClick={() => handleExport('editable-pptx')}
+                  className="w-full px-4 py-2 text-left hover:bg-gray-50 transition-colors text-sm"
+                >
+                  导出可编辑 PPTX（不稳定测试版）
                 </button>
                 <button
                   onClick={() => handleExport('pdf')}

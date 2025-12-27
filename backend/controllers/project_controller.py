@@ -3,6 +3,7 @@ Project Controller - handles project-related endpoints
 """
 import logging
 from flask import Blueprint, request, jsonify, current_app
+from werkzeug.exceptions import BadRequest
 from models import db, Project, Page, Task, ReferenceFile
 from utils import success_response, error_response, not_found, bad_request
 from services import AIService, ProjectContext
@@ -125,6 +126,7 @@ def list_projects():
         })
     
     except Exception as e:
+        logger.error(f"list_projects failed: {str(e)}", exc_info=True)
         return error_response('SERVER_ERROR', str(e), 500)
 
 
@@ -148,7 +150,11 @@ def create_project():
         if not data:
             return bad_request("Request body is required")
         
-        creation_type = data.get('creation_type', 'idea')
+        # creation_type is required
+        if 'creation_type' not in data:
+            return bad_request("creation_type is required")
+        
+        creation_type = data.get('creation_type')
         
         if creation_type not in ['idea', 'outline', 'descriptions']:
             return bad_request("Invalid creation_type")
@@ -171,6 +177,12 @@ def create_project():
             'pages': []
         }, status_code=201)
     
+    except BadRequest as e:
+        # Handle JSON parsing errors (invalid JSON body)
+        db.session.rollback()
+        logger.warning(f"create_project: Invalid JSON body - {str(e)}")
+        return bad_request("Invalid JSON in request body")
+    
     except Exception as e:
         db.session.rollback()
         error_trace = traceback.format_exc()
@@ -192,6 +204,7 @@ def get_project(project_id):
         return success_response(project.to_dict(include_pages=True))
     
     except Exception as e:
+        logger.error(f"get_project failed: {str(e)}", exc_info=True)
         return error_response('SERVER_ERROR', str(e), 500)
 
 
@@ -237,6 +250,7 @@ def update_project(project_id):
     
     except Exception as e:
         db.session.rollback()
+        logger.error(f"update_project failed: {str(e)}", exc_info=True)
         return error_response('SERVER_ERROR', str(e), 500)
 
 
@@ -264,6 +278,7 @@ def delete_project(project_id):
     
     except Exception as e:
         db.session.rollback()
+        logger.error(f"delete_project failed: {str(e)}", exc_info=True)
         return error_response('SERVER_ERROR', str(e), 500)
 
 
@@ -576,6 +591,7 @@ def generate_descriptions(project_id):
     
     except Exception as e:
         db.session.rollback()
+        logger.error(f"generate_descriptions failed: {str(e)}", exc_info=True)
         return error_response('SERVER_ERROR', str(e), 500)
 
 
@@ -671,6 +687,7 @@ def generate_images(project_id):
     
     except Exception as e:
         db.session.rollback()
+        logger.error(f"generate_images failed: {str(e)}", exc_info=True)
         return error_response('SERVER_ERROR', str(e), 500)
 
 
@@ -688,6 +705,7 @@ def get_task_status(project_id, task_id):
         return success_response(task.to_dict())
     
     except Exception as e:
+        logger.error(f"get_task_status failed: {str(e)}", exc_info=True)
         return error_response('SERVER_ERROR', str(e), 500)
 
 
